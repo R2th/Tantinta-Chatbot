@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 import SendIcon from "@mui/icons-material/Send";
 
-import Emoji from "react-emoji-render";
+import Message from "../../components/Message";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -24,36 +24,18 @@ const useStyles = makeStyles(() => ({
     justifyContent: "flex-end",
   },
 
-  promptText: {
-    padding: 10,
-    backgroundColor: "#374151",
-    color: "#FFFFFF",
-    width: "fit-content",
-    borderRadius: 15,
-    alignSelf: "flex-end",
-    maxWidth: "70%",
-  },
-
-  responseText: {
-    backgroundColor: "rgb(17, 24, 39)",
-    color: "rgb(243, 244, 246)",
-    padding: 10,
-    width: "fit-content",
-    overflowWrap: "break-word",
-    borderRadius: 15,
-    maxWidth: "70%",
-  },
-
   box: {
     borderColor: "orange",
     height: "100%",
-    marginBottom: 20,
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
     padding: 10,
     gap: 10,
     overflowY: "scroll",
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomColor: "transparent",
   },
 }));
 
@@ -66,97 +48,137 @@ const Chat = () => {
   const session = pathname.split("/")[2];
 
   const [conversation, setConversation] = useState([
-    { source: "chatbot", message: "Hello, world! :)" },
-    { source: "chatbot", message: "check" },
-    { source: "user", message: "Hi again" },
-    { source: "chatbot", message: "Hello, world!" },
-    { source: "chatbot", message: "check" },
-    { source: "user", message: "Hi again" },
-    { source: "chatbot", message: "Hello, world!" },
-    { source: "chatbot", message: "check" },
-    { source: "user", message: "Hi again" },
-    { source: "chatbot", message: "Hello, world!" },
-    { source: "chatbot", message: "check" },
-    { source: "user", message: "Hi again" },
-    { source: "chatbot", message: "Hello, world!" },
-    { source: "chatbot", message: "check" },
-    { source: "user", message: "Hi again" },
-    { source: "chatbot", message: "Hello, world!" },
-    { source: "chatbot", message: "check" },
-    { source: "user", message: "Hi again :)" },
+    {
+      role: "human",
+      content: "hello",
+      metadata: {},
+    },
+    {
+      role: "tatinta",
+      content: " xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
+      metadata: {
+        "interpolated topics":
+          "travel services, tourism, vacation, destination, sightseeing",
+        "retrived context": [
+          "\n        input: Tôi muốn đặt tour của trên sàn du lịch Tatinta thì phải đặt trước bao lâu?\n        output: Tùy vào một số loại tour, quý khách có thể đặt tour linh hoạt trọn gói. Một số tour sẽ quy định thời gian đặt trước bao lâu tùy vào quy định về việc đặt vé máy bay, thời gian chuẩn bị hồ sơ visa (nếu có).\n Trường hợp bị từ chối visa, Quý khách sẽ mất phí làm visa và đặt cọc vé máy bay theo phần liệt kê ở Điều kiện hủy tour trong Chương trình du lịch chi tiết\n        ",
+        ],
+        content:
+          "xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
+      },
+    },
+    {
+      role: "human",
+      content: "bạn có thể làm được những gì",
+      metadata: {},
+    },
+    {
+      role: "human",
+      content: "hello",
+      metadata: {},
+    },
+    {
+      role: "tatinta",
+      content: " xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
+      metadata: {
+        "interpolated topics":
+          "travel services, tourism, vacation, destination, sightseeing",
+        "retrived context": [
+          "\n        input: Tôi muốn đặt tour của trên sàn du lịch Tatinta thì phải đặt trước bao lâu?\n        output: Tùy vào một số loại tour, quý khách có thể đặt tour linh hoạt trọn gói. Một số tour sẽ quy định thời gian đặt trước bao lâu tùy vào quy định về việc đặt vé máy bay, thời gian chuẩn bị hồ sơ visa (nếu có).\n Trường hợp bị từ chối visa, Quý khách sẽ mất phí làm visa và đặt cọc vé máy bay theo phần liệt kê ở Điều kiện hủy tour trong Chương trình du lịch chi tiết\n        ",
+        ],
+        content:
+          "xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
+      },
+    },
+    {
+      role: "human",
+      content: "bạn có thể làm được những gì",
+      metadata: {},
+    },
+    {
+      role: "human",
+      content: "hello",
+      metadata: {},
+    },
+    {
+      role: "tatinta",
+      content: " xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
+      metadata: {
+        "interpolated topics":
+          "travel services, tourism, vacation, destination, sightseeing",
+        "retrived context": [
+          "\n        input: Tôi muốn đặt tour của trên sàn du lịch Tatinta thì phải đặt trước bao lâu?\n        output: Tùy vào một số loại tour, quý khách có thể đặt tour linh hoạt trọn gói. Một số tour sẽ quy định thời gian đặt trước bao lâu tùy vào quy định về việc đặt vé máy bay, thời gian chuẩn bị hồ sơ visa (nếu có).\n Trường hợp bị từ chối visa, Quý khách sẽ mất phí làm visa và đặt cọc vé máy bay theo phần liệt kê ở Điều kiện hủy tour trong Chương trình du lịch chi tiết\n        ",
+        ],
+        content:
+          "xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
+      },
+    },
+    {
+      role: "human",
+      content: "bạn có thể làm được những gì",
+      metadata: {},
+    },
   ]);
+
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const bottomRef = useRef(null);
-
-  const handleSendPrompt = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const _dumpConversation = [{ source: "user", message: prompt }];
+    if (prompt !== "") {
+      setIsLoading(true);
 
-    setIsLoading(true);
-    setPrompt("");
+      const newConversation = [
+        ...conversation,
+        { role: "human", content: prompt, metadata: {} },
+      ];
 
-    const { data } = await axios.post(`${REACT_APP_SERVER_URL}/api/v1/chat`, {
-      conversation_id: session,
-      msg: prompt,
-    });
+      setPrompt("");
+      setConversation(newConversation);
 
-    console.log(data);
+      const { data } = await axios.post(`${REACT_APP_SERVER_URL}/api/v1/chat`, {
+        content: [...newConversation],
+      });
 
-    const _dump = [
-      ..._dumpConversation,
-      { source: "chatbot", message: data.response },
-    ];
+      setIsLoading(false);
 
-    setConversation((prev) => [...prev, ..._dump]);
-
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    // 👇️ scroll to bottom every time messages change
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [conversation]);
-
-  useEffect(() => {
-    const fetchConversation = async () => {
-      const { data } = await axios.post(
-        REACT_APP_SERVER_URL + "/api/v1/private/conv?conversation_id=" + session
-      );
-
-      console.log(data);
-    };
-    fetchConversation();
-  }, []);
-
-  const renderMessage = (msg) => {
-    console.log(msg);
-
-    if (msg.source === "chatbot") {
-      return <Emoji className={styles.responseText}>{msg.message}</Emoji>;
-    }
-
-    if (msg.source === "user") {
-      return <Emoji className={styles.promptText}>{msg.message}</Emoji>;
+      if (data.content) {
+        setConversation(data.content);
+      }
     }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.box}>
-        {conversation.map((msg) => renderMessage(msg))}
-        {isLoading && <div className="loading">...</div>}
-        <div ref={bottomRef}></div>
+        {conversation.map((msg) => (
+          <Message role={msg.role} content={msg.content} />
+        ))}
       </div>
+      {isLoading && (
+        <div
+          style={{
+            border: "1px solid orange",
+            borderBottom: "none",
+            borderTop: "none",
+            borderRadius: 0,
+            width: "100%",
+            padding: 12,
+          }}
+        >
+          <div className="loading">...</div>
+        </div>
+      )}
       <form
-        onSubmit={handleSendPrompt}
+        onSubmit={handleSubmit}
         style={{
           display: "grid",
           gridTemplateColumns: "auto 60px",
-          columnGap: 20,
-          padding: 20,
+          columnGap: 10,
+          padding: "8px 16px",
+          border: "1px solid orange",
+          borderBottomLeftRadius: 8,
+          borderBottomRightRadius: 8,
         }}
       >
         <TextField
@@ -171,13 +193,11 @@ const Chat = () => {
               color: "#f3f4f6",
             },
           }}
+          disabled={isLoading}
         />
         <IconButton>
           <SendIcon color="warning" />
         </IconButton>
-        {/* <Button type="submit" variant="contained">
-          Send
-        </Button> */}
       </form>
     </div>
   );
