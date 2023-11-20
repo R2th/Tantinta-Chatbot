@@ -1,12 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
-import { Button, IconButton, TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import axios from "axios";
 // import ReactMarkdown from "react-markdown";
-import { useLocation } from "react-router-dom";
-import remarkGfm from "remark-gfm";
+// import remarkGfm from "remark-gfm";
 import SendIcon from "@mui/icons-material/Send";
 
 import Message from "../../components/Message";
@@ -43,81 +42,8 @@ const REACT_APP_SERVER_URL = "http://selab.nhtlongcs.com:20503";
 
 const Chat = () => {
   const styles = useStyles();
-  const { pathname } = useLocation();
 
-  const session = pathname.split("/")[2];
-
-  const [conversation, setConversation] = useState([
-    {
-      role: "human",
-      content: "hello",
-      metadata: {},
-    },
-    {
-      role: "tatinta",
-      content: " xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
-      metadata: {
-        "interpolated topics":
-          "travel services, tourism, vacation, destination, sightseeing",
-        "retrived context": [
-          "\n        input: Tôi muốn đặt tour của trên sàn du lịch Tatinta thì phải đặt trước bao lâu?\n        output: Tùy vào một số loại tour, quý khách có thể đặt tour linh hoạt trọn gói. Một số tour sẽ quy định thời gian đặt trước bao lâu tùy vào quy định về việc đặt vé máy bay, thời gian chuẩn bị hồ sơ visa (nếu có).\n Trường hợp bị từ chối visa, Quý khách sẽ mất phí làm visa và đặt cọc vé máy bay theo phần liệt kê ở Điều kiện hủy tour trong Chương trình du lịch chi tiết\n        ",
-        ],
-        content:
-          "xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
-      },
-    },
-    {
-      role: "human",
-      content: "bạn có thể làm được những gì",
-      metadata: {},
-    },
-    {
-      role: "human",
-      content: "hello",
-      metadata: {},
-    },
-    {
-      role: "tatinta",
-      content: " xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
-      metadata: {
-        "interpolated topics":
-          "travel services, tourism, vacation, destination, sightseeing",
-        "retrived context": [
-          "\n        input: Tôi muốn đặt tour của trên sàn du lịch Tatinta thì phải đặt trước bao lâu?\n        output: Tùy vào một số loại tour, quý khách có thể đặt tour linh hoạt trọn gói. Một số tour sẽ quy định thời gian đặt trước bao lâu tùy vào quy định về việc đặt vé máy bay, thời gian chuẩn bị hồ sơ visa (nếu có).\n Trường hợp bị từ chối visa, Quý khách sẽ mất phí làm visa và đặt cọc vé máy bay theo phần liệt kê ở Điều kiện hủy tour trong Chương trình du lịch chi tiết\n        ",
-        ],
-        content:
-          "xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
-      },
-    },
-    {
-      role: "human",
-      content: "bạn có thể làm được những gì",
-      metadata: {},
-    },
-    {
-      role: "human",
-      content: "hello",
-      metadata: {},
-    },
-    {
-      role: "tatinta",
-      content: " xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
-      metadata: {
-        "interpolated topics":
-          "travel services, tourism, vacation, destination, sightseeing",
-        "retrived context": [
-          "\n        input: Tôi muốn đặt tour của trên sàn du lịch Tatinta thì phải đặt trước bao lâu?\n        output: Tùy vào một số loại tour, quý khách có thể đặt tour linh hoạt trọn gói. Một số tour sẽ quy định thời gian đặt trước bao lâu tùy vào quy định về việc đặt vé máy bay, thời gian chuẩn bị hồ sơ visa (nếu có).\n Trường hợp bị từ chối visa, Quý khách sẽ mất phí làm visa và đặt cọc vé máy bay theo phần liệt kê ở Điều kiện hủy tour trong Chương trình du lịch chi tiết\n        ",
-        ],
-        content:
-          "xin chào, tôi là chatbot Tatinta, tôi có thể giúp gì cho bạn?",
-      },
-    },
-    {
-      role: "human",
-      content: "bạn có thể làm được những gì",
-      metadata: {},
-    },
-  ]);
+  const [conversation, setConversation] = useState([]);
 
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -166,7 +92,11 @@ const Chat = () => {
             padding: 12,
           }}
         >
-          <div className="loading">...</div>
+          <div className="is-typing">
+            <div className="jump1"></div>
+            <div className="jump2"></div>
+            <div className="jump3"></div>
+          </div>
         </div>
       )}
       <form
