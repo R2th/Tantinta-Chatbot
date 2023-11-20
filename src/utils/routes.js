@@ -1,5 +1,5 @@
 import Chat from "../pages/Chat";
-import Home from "../pages/Home";
+// import Home from "../pages/Home";
 import Login from "../pages/Login";
 import NotFoundPageError from "../pages/NotFoundPageError";
 // import User from "../pages/User";
@@ -14,7 +14,7 @@ const AUTH_ROUTES = [
 export const ROUTES = [
   {
     index: true,
-    element: <Home />,
+    element: <Chat />,
   },
   {
     path: "chat",
