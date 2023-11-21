@@ -38,8 +38,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const REACT_APP_SERVER_URL = "http://selab.nhtlongcs.com:20503";
-
 const Chat = () => {
   const styles = useStyles();
 
@@ -62,9 +60,12 @@ const Chat = () => {
       setPrompt("");
       setConversation(newConversation);
 
-      const { data } = await axios.post(`${REACT_APP_SERVER_URL}/api/v1/chat`, {
-        content: [...newConversation],
-      });
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/v1/chat`,
+        {
+          content: [...newConversation],
+        }
+      );
 
       setIsLoading(false);
 
@@ -77,8 +78,8 @@ const Chat = () => {
   return (
     <div className={styles.container}>
       <div className={styles.box}>
-        {conversation.map((msg) => (
-          <Message role={msg.role} content={msg.content} />
+        {conversation.map((msg, idx) => (
+          <Message role={msg.role} content={msg.content} key={idx} />
         ))}
       </div>
       {isLoading && (
