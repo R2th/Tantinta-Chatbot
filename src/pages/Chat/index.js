@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { IconButton, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     justifyContent: "flex-end",
     padding: 10,
-    gap: 10,
+    gap: 5,
     overflowY: "scroll",
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
@@ -45,6 +45,8 @@ const Chat = () => {
 
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [prevChat, setPrevChat] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,17 +65,50 @@ const Chat = () => {
       const { data } = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/v1/chat`,
         {
-          content: [...newConversation],
+          content: [
+            ...newConversation.filter(
+              (conversation) => conversation.role !== "prev-chat"
+            ),
+          ],
         }
       );
 
       setIsLoading(false);
 
       if (data.content) {
-        setConversation(data.content);
+        const lastMessage = data.content.slice(-1)[0];
+
+        if (lastMessage.role === "tatinta") {
+          const messages = lastMessage.content
+            .split(/(?<=[.!?])\s+/)
+            .map((msg) => ({ role: "prev-chat", content: msg }));
+
+          setPrevChat(messages);
+
+          setConversation((prev) => [...prev, ...data.content.slice(-1)]);
+        }
       }
     }
   };
+
+  useEffect(() => {
+    if (prevChat.length > 0) {
+      setIsLoading(true);
+      const _dump = prevChat[0];
+
+      const timeInterval = (_dump.content.length / 200) * 60 * 1000;
+
+      let interval = setInterval(() => {
+        setConversation((prev) => [...prev, _dump]);
+        setPrevChat((prev) => prev.slice(1));
+        setIsLoading(false);
+      }, timeInterval);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [prevChat]);
 
   return (
     <div className={styles.container}>

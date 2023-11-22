@@ -82,12 +82,6 @@ const ResponseMessage = ({ content }) => {
 
   const ref = useRef(null);
 
-  useEffect(() => {
-    if (ref.current) {
-      console.log(ref.current.getBoundingClientRect());
-    }
-  }, []);
-
   return (
     <div
       className={styles.box}
@@ -97,7 +91,7 @@ const ResponseMessage = ({ content }) => {
       <div
         className={styles.responseText}
         ref={ref}
-        style={{ marginBottom: 5 }}
+        // style={{ marginBottom: 5 }}
       >
         <Emoji>{content}</Emoji>
         {(isReactionActive || isHover) && (
@@ -108,13 +102,14 @@ const ResponseMessage = ({ content }) => {
               bottom: -20,
               border: "none",
               cursor: "pointer",
+              zIndex: 10,
             }}
             onClick={() => {
               setIsReactionActive((prev) => !prev);
             }}
           >
             {isReactionActive ? (
-              <FavoriteIcon className="icon-active" />
+              <FavoriteIcon className="icon-active" color="error" />
             ) : (
               <FavoriteBorderIcon />
             )}
@@ -168,6 +163,7 @@ const PromptMessage = ({ content }) => {
               bottom: -20,
               border: "none",
               cursor: "pointer",
+              zIndex: 10,
             }}
             onClick={() => {
               setIsReactionActive((prev) => !prev);
@@ -175,7 +171,7 @@ const PromptMessage = ({ content }) => {
             ref={ref}
           >
             {isReactionActive ? (
-              <FavoriteIcon className="icon-active" />
+              <FavoriteIcon className="icon-active" color="error" />
             ) : (
               <FavoriteBorderIcon />
             )}
@@ -190,7 +186,7 @@ const Message = ({ role, content }) => {
   return (
     <>
       {role === "human" && <PromptMessage content={content} />}
-      {role === "tatinta" && <ResponseMessage content={content} />}
+      {role === "prev-chat" && <ResponseMessage content={content} />}
     </>
   );
 };
