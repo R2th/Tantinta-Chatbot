@@ -81,7 +81,7 @@ const Chat = () => {
         if (lastMessage.role === "tatinta") {
           const messages = lastMessage.content
             .split(/(?<=[.!?])\s+/)
-            .map((msg) => ({ role: "prev-chat", content: msg }));
+            .map((msg) => ({ role: "prev-chat", content: msg + " :)" }));
 
           setPrevChat(messages);
 
