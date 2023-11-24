@@ -97,7 +97,7 @@ const Chat = () => {
       setIsLoading(true);
       const _dump = prevChat[0];
 
-      const timeInterval = (_dump.content.length / 200) * 60 * 1000;
+      const timeInterval = (_dump.content.length / 75) * 60 * 1000;
 
       let interval = setInterval(() => {
         setConversation((prev) => [...prev, _dump]);
