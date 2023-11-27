@@ -29,9 +29,8 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
-    padding: 10,
     gap: 5,
-    overflowY: "scroll",
+    overflowY: "hidden",
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderBottomColor: "transparent",
@@ -113,9 +112,18 @@ const Chat = () => {
   return (
     <div className={styles.container}>
       <div className={styles.box}>
-        {conversation.map((msg, idx) => (
-          <Message role={msg.role} content={msg.content} key={idx} />
-        ))}
+        <div
+          style={{
+            overflowY: "scroll",
+            border: "none",
+            overflowX: "visible",
+            padding: 10,
+          }}
+        >
+          {conversation.map((msg, idx) => (
+            <Message role={msg.role} content={msg.content} key={idx} />
+          ))}
+        </div>
       </div>
       {isLoading && (
         <div
