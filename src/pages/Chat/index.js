@@ -12,6 +12,16 @@ import axios from "axios";
 
 const useStyles = makeStyles(() => ({
   container: {
+    position: "fixed",
+    bottom: "2rem",
+    right: "2rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+    border: "none",
+    gap: "1rem",
+  },
+  chat: {
     width: "24rem",
     height: "32rem",
     display: "flex",
@@ -19,7 +29,18 @@ const useStyles = makeStyles(() => ({
     justifyContent: "flex-end",
     backgroundColor: "#f4f4f4",
   },
-
+  header: {
+    backgroundColor: "#2d3552",
+    color: "#f6f6f6",
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    padding: "8px 16px",
+    fontWeight: "bold",
+    border: "none",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   box: {
     height: "100%",
     display: "flex",
@@ -32,17 +53,25 @@ const useStyles = makeStyles(() => ({
     backgroundColor: "inherit",
     borderColor: "#318fb5",
   },
+  form: {
+    display: "grid",
+    gridTemplateColumns: "auto 60px",
+    columnGap: 10,
+    padding: "8px 16px",
+    border: "1px solid #318fb5",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+  },
 }));
 
 const ChatBox = ({ children }) => {
   const styles = useStyles();
 
-  const [conversation, setConversation] = useState([]);
-
-  const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const [prevChat, setPrevChat] = useState([]);
+  const [conversation, setConversation] = useState([]); // Array of conversation with
+  // role 'prev-chat' as response from chatbox, 'human', and hidden role 'tantinta' (original response content from server)
+  const [prevChat, setPrevChat] = useState([]); // Using prevChat as stack and push to Chat with speed calculation by CPM
+  const [prompt, setPrompt] = useState("");
 
   const scrollRef = useRef(null);
 
@@ -77,11 +106,6 @@ const ChatBox = ({ children }) => {
         const lastMessage = data.content.slice(-1)[0];
 
         if (lastMessage.role === "tatinta") {
-          // const messages = lastMessage.content
-          //   .split(/(?<=[.!?])\s+/)
-          //   .map((msg) => ({ role: "prev-chat", content: msg + " :)" }));
-
-          // setPrevChat(messages);
           setPrevChat(
             lastMessage.metadata.sent.map((msg) => ({
               role: "prev-chat",
@@ -95,6 +119,7 @@ const ChatBox = ({ children }) => {
     }
   };
 
+  // Auto scroll to bottom of conversation
   useEffect(() => {
     if (conversation.length || isLoading) {
       scrollRef.current?.scrollIntoView({
@@ -104,12 +129,14 @@ const ChatBox = ({ children }) => {
     }
   }, [conversation.length, isLoading]);
 
+  // Push respectively prevChat to the conversation
   useEffect(() => {
     if (prevChat.length > 0) {
       setIsLoading(true);
       const _dump = prevChat[0];
 
-      const timeInterval = (_dump.content.length / 500) * 60 * 1000;
+      const timeInterval =
+        (_dump.content.length / process.env.REACT_APP_CPM) * 60 * 1000;
 
       let interval = setInterval(() => {
         setConversation((prev) => [...prev, _dump]);
@@ -160,18 +187,7 @@ const ChatBox = ({ children }) => {
         </div>
       </div>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "auto 60px",
-          columnGap: 10,
-          padding: "8px 16px",
-          border: "1px solid #318fb5",
-          borderBottomLeftRadius: 8,
-          borderBottomRightRadius: 8,
-        }}
-      >
+      <form className={styles.form} onSubmit={handleSubmit}>
         <TextField
           value={prompt}
           placeholder="Ask me"
@@ -196,37 +212,14 @@ const ChatBox = ({ children }) => {
 };
 
 const Chat = () => {
+  const styles = useStyles();
   const [active, setActive] = useState(true);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: "2rem",
-        right: "2rem",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-end",
-        border: "none",
-        gap: "1rem",
-      }}
-    >
+    <div className={styles.container}>
       {active && (
         <ChatBox>
-          <div
-            style={{
-              backgroundColor: "#2d3552",
-              color: "#f6f6f6",
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-              padding: "8px 16px",
-              fontWeight: "bold",
-              border: "none",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <div className={styles.header}>
             Tantinta
             <IconButton
               size="small"

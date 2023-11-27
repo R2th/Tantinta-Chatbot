@@ -8,6 +8,7 @@
 
 ```yaml
 REACT_APP_SERVER_URL = "https://selab.edu.vn/demos/nhtlong/20503"
+REACT_APP_CPM=500 # Speed of chatbox (character per minute)
 ```
 
 # Start the application

@@ -1,8 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import Emoji from "react-emoji-render";
-// import { IconButton } from "@mui/material";
-// import MoodIcon from "@mui/icons-material/Mood";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
@@ -18,7 +16,6 @@ const useStyle = makeStyles(() => ({
     marginBottom: 10,
     marginTop: 5,
   },
-
   responseText: {
     backgroundColor: "#fff",
     color: "#2d3552",
@@ -29,13 +26,21 @@ const useStyle = makeStyles(() => ({
     maxWidth: "80%",
     position: "relative",
   },
-
   box: {
     display: "flex",
     flexDirection: "row",
     border: "none",
     width: "100%",
     position: "relative",
+  },
+  iconHeart: {
+    position: "absolute",
+    right: -10,
+    bottom: -20,
+    border: "none",
+    cursor: "pointer",
+    zIndex: 10,
+    color: "#FF6961",
   },
 }));
 
@@ -57,31 +62,10 @@ const useHover = () => {
   };
 };
 
-// const ButtonReact = ({ onClick }) => {
-//   return (
-//     <div
-//       style={{
-//         marginLeft: 5,
-//         marginRight: 5,
-//         border: "none",
-//         display: "flex",
-//         justifyContent: "center",
-//         alignItems: "center",
-//       }}
-//     >
-//       <IconButton onClick={onClick}>
-//         <MoodIcon />
-//       </IconButton>
-//     </div>
-//   );
-// };
-
 const ResponseMessage = ({ content }) => {
   const styles = useStyle();
   const { isHover, handleMouseLeave, handleMouseMove } = useHover();
   const [isReactionActive, setIsReactionActive] = useState(false);
-
-  const ref = useRef(null);
 
   return (
     <div
@@ -92,23 +76,11 @@ const ResponseMessage = ({ content }) => {
         backgroundColor: "inherit",
       }}
     >
-      <div
-        className={styles.responseText}
-        ref={ref}
-        // style={{ marginBottom: 5 }}
-      >
+      <div className={styles.responseText}>
         <Emoji>{content}</Emoji>
         {(isReactionActive || isHover) && (
           <div
-            style={{
-              position: "absolute",
-              right: -10,
-              bottom: -20,
-              border: "none",
-              cursor: "pointer",
-              zIndex: 10,
-              color: "#FF6961",
-            }}
+            className={styles.iconHeart}
             onClick={() => {
               setIsReactionActive((prev) => !prev);
             }}
@@ -121,13 +93,6 @@ const ResponseMessage = ({ content }) => {
           </div>
         )}
       </div>
-      {/* {isHover && (
-        <ButtonReact
-          onClick={() => {
-            setIsReactionActive((prev) => !prev);
-          }}
-        />
-      )} */}
     </div>
   );
 };
@@ -136,7 +101,6 @@ const PromptMessage = ({ content }) => {
   const styles = useStyle();
   const { isHover, handleMouseLeave, handleMouseMove } = useHover();
   const [isReactionActive, setIsReactionActive] = useState(false);
-  const ref = useRef();
 
   useEffect(() => {
     let interval = setInterval(() => {
@@ -158,24 +122,14 @@ const PromptMessage = ({ content }) => {
         backgroundColor: "inherit",
       }}
     >
-      {/* {isHover && <ButtonReact />} */}
       <div className={styles.promptText} style={{ marginBottom: 5 }}>
         <Emoji>{content}</Emoji>
         {(isReactionActive || isHover) && (
           <div
-            style={{
-              position: "absolute",
-              right: -10,
-              bottom: -20,
-              border: "none",
-              cursor: "pointer",
-              zIndex: 10,
-              color: "#FF6961",
-            }}
+            className={styles.iconHeart}
             onClick={() => {
               setIsReactionActive((prev) => !prev);
             }}
-            ref={ref}
           >
             {isReactionActive ? (
               <FavoriteIcon className="icon-active" />
