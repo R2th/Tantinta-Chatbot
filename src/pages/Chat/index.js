@@ -78,11 +78,12 @@ const Chat = () => {
         const lastMessage = data.content.slice(-1)[0];
 
         if (lastMessage.role === "tatinta") {
-          const messages = lastMessage.content
-            .split(/(?<=[.!?])\s+/)
-            .map((msg) => ({ role: "prev-chat", content: msg }));
+          // const messages = lastMessage.content
+          //   .split(/(?<=[.!?])\s+/)
+          //   .map((msg) => ({ role: "prev-chat", content: msg + " :)" }));
 
-          setPrevChat(messages);
+          // setPrevChat(messages);
+          setPrevChat(lastMessage.metadata.sent.map((msg) => ({ role: "prev-chat", content: msg })));
 
           setConversation((prev) => [...prev, ...data.content.slice(-1)]);
         }
@@ -95,7 +96,7 @@ const Chat = () => {
       setIsLoading(true);
       const _dump = prevChat[0];
 
-      const timeInterval = (_dump.content.length / 200) * 60 * 1000;
+      const timeInterval = (_dump.content.length / 500) * 60 * 1000;
 
       let interval = setInterval(() => {
         setConversation((prev) => [...prev, _dump]);
