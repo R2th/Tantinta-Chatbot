@@ -9,23 +9,24 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 const useStyle = makeStyles(() => ({
   promptText: {
     padding: 10,
-    backgroundColor: "#374151",
-    color: "#FFFFFF",
+    backgroundColor: "#2d3552",
+    color: "#f6f6f6",
     width: "fit-content",
     borderRadius: 15,
-    maxWidth: "70%",
+    maxWidth: "80%",
     position: "relative",
     marginBottom: 10,
+    marginTop: 5,
   },
 
   responseText: {
-    backgroundColor: "rgb(17, 24, 39)",
-    color: "rgb(243, 244, 246)",
+    backgroundColor: "#fff",
+    color: "#2d3552",
     padding: 10,
     width: "fit-content",
     overflowWrap: "break-word",
     borderRadius: 15,
-    maxWidth: "70%",
+    maxWidth: "80%",
     position: "relative",
   },
 
@@ -87,6 +88,9 @@ const ResponseMessage = ({ content }) => {
       className={styles.box}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      style={{
+        backgroundColor: "inherit",
+      }}
     >
       <div
         className={styles.responseText}
@@ -103,13 +107,14 @@ const ResponseMessage = ({ content }) => {
               border: "none",
               cursor: "pointer",
               zIndex: 10,
+              color: "#FF6961",
             }}
             onClick={() => {
               setIsReactionActive((prev) => !prev);
             }}
           >
             {isReactionActive ? (
-              <FavoriteIcon className="icon-active" color="error" />
+              <FavoriteIcon className="icon-active" />
             ) : (
               <FavoriteBorderIcon />
             )}
@@ -150,6 +155,7 @@ const PromptMessage = ({ content }) => {
       onMouseLeave={handleMouseLeave}
       style={{
         justifyContent: "flex-end",
+        backgroundColor: "inherit",
       }}
     >
       {/* {isHover && <ButtonReact />} */}
@@ -164,6 +170,7 @@ const PromptMessage = ({ content }) => {
               border: "none",
               cursor: "pointer",
               zIndex: 10,
+              color: "#FF6961",
             }}
             onClick={() => {
               setIsReactionActive((prev) => !prev);
@@ -171,7 +178,7 @@ const PromptMessage = ({ content }) => {
             ref={ref}
           >
             {isReactionActive ? (
-              <FavoriteIcon className="icon-active" color="error" />
+              <FavoriteIcon className="icon-active" />
             ) : (
               <FavoriteBorderIcon />
             )}

@@ -1,43 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { Button, IconButton, TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
-import axios from "axios";
-// import ReactMarkdown from "react-markdown";
-// import remarkGfm from "remark-gfm";
 import SendIcon from "@mui/icons-material/Send";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import CloseIcon from "@mui/icons-material/Close";
 
 import Message from "../../components/Message";
+import axios from "axios";
 
 const useStyles = makeStyles(() => ({
   container: {
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "50vw",
-    height: "50vh",
+    width: "24rem",
+    height: "32rem",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
+    backgroundColor: "#f4f4f4",
   },
 
   box: {
-    borderColor: "orange",
     height: "100%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
     gap: 5,
     overflowY: "hidden",
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
+    borderRadius: 0,
     borderBottomColor: "transparent",
+    backgroundColor: "inherit",
+    borderColor: "#318fb5",
   },
 }));
 
-const Chat = () => {
+const ChatBox = ({ children }) => {
   const styles = useStyles();
 
   const [conversation, setConversation] = useState([]);
@@ -99,13 +96,13 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    if (conversation.length) {
+    if (conversation.length || isLoading) {
       scrollRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "end",
       });
     }
-  }, [conversation.length]);
+  }, [conversation.length, isLoading]);
 
   useEffect(() => {
     if (prevChat.length > 0) {
@@ -128,6 +125,7 @@ const Chat = () => {
 
   return (
     <div className={styles.container}>
+      {children}
       <div className={styles.box}>
         <div
           style={{
@@ -135,6 +133,7 @@ const Chat = () => {
             border: "none",
             overflowX: "visible",
             padding: 10,
+            backgroundColor: "inherit",
           }}
         >
           {conversation.map((msg, idx) => (
@@ -168,7 +167,7 @@ const Chat = () => {
           gridTemplateColumns: "auto 60px",
           columnGap: 10,
           padding: "8px 16px",
-          border: "1px solid orange",
+          border: "1px solid #318fb5",
           borderBottomLeftRadius: 8,
           borderBottomRightRadius: 8,
         }}
@@ -178,19 +177,77 @@ const Chat = () => {
           placeholder="Ask me"
           onChange={(e) => setPrompt(e.target.value)}
           fullWidth
-          color="warning"
           focused
           sx={{
             input: {
-              color: "#f3f4f6",
+              color: "#2d3552",
+              backgroundColor: "white",
+              height: "inherit",
             },
           }}
           disabled={isLoading}
         />
-        <IconButton>
-          <SendIcon color="warning" />
+        <IconButton style={{ color: "#318fb5" }}>
+          <SendIcon color="inherit" />
         </IconButton>
       </form>
+    </div>
+  );
+};
+
+const Chat = () => {
+  const [active, setActive] = useState(true);
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: "2rem",
+        right: "2rem",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+        border: "none",
+        gap: "1rem",
+      }}
+    >
+      {active && (
+        <ChatBox>
+          <div
+            style={{
+              backgroundColor: "#2d3552",
+              color: "#f6f6f6",
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              padding: "8px 16px",
+              fontWeight: "bold",
+              border: "none",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            Tantinta
+            <IconButton
+              size="small"
+              onClick={() => {
+                setActive(false);
+              }}
+            >
+              <CloseIcon color="info" />
+            </IconButton>
+          </div>
+        </ChatBox>
+      )}
+      <IconButton
+        onClick={() => {
+          setActive(true);
+        }}
+        size="large"
+        color="info"
+      >
+        <QuestionAnswerIcon />
+      </IconButton>
     </div>
   );
 };
