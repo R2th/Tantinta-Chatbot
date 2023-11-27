@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import { IconButton, TextField } from "@mui/material";
+import { Button, IconButton, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import axios from "axios";
@@ -47,6 +47,8 @@ const Chat = () => {
 
   const [prevChat, setPrevChat] = useState([]);
 
+  const scrollRef = useRef(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,13 +85,27 @@ const Chat = () => {
           //   .map((msg) => ({ role: "prev-chat", content: msg + " :)" }));
 
           // setPrevChat(messages);
-          setPrevChat(lastMessage.metadata.sent.map((msg) => ({ role: "prev-chat", content: msg })));
+          setPrevChat(
+            lastMessage.metadata.sent.map((msg) => ({
+              role: "prev-chat",
+              content: msg,
+            }))
+          );
 
           setConversation((prev) => [...prev, ...data.content.slice(-1)]);
         }
       }
     }
   };
+
+  useEffect(() => {
+    if (conversation.length) {
+      scrollRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [conversation.length]);
 
   useEffect(() => {
     if (prevChat.length > 0) {
@@ -124,26 +140,27 @@ const Chat = () => {
           {conversation.map((msg, idx) => (
             <Message role={msg.role} content={msg.content} key={idx} />
           ))}
+          {isLoading && (
+            <div
+              style={{
+                border: "none",
+                width: "100%",
+              }}
+            >
+              <div className="is-typing">
+                <div className="jump1"></div>
+                <div className="jump2"></div>
+                <div className="jump3"></div>
+              </div>
+            </div>
+          )}
+          <div
+            style={{ border: "none", float: "left", clear: "both" }}
+            ref={scrollRef}
+          />
         </div>
       </div>
-      {isLoading && (
-        <div
-          style={{
-            border: "1px solid orange",
-            borderBottom: "none",
-            borderTop: "none",
-            borderRadius: 0,
-            width: "100%",
-            padding: 12,
-          }}
-        >
-          <div className="is-typing">
-            <div className="jump1"></div>
-            <div className="jump2"></div>
-            <div className="jump3"></div>
-          </div>
-        </div>
-      )}
+
       <form
         onSubmit={handleSubmit}
         style={{
