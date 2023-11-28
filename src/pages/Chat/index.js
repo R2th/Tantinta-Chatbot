@@ -151,7 +151,7 @@ const ChatBox = ({ children }) => {
   }, [prevChat]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.chat}>
       {children}
       <div className={styles.box}>
         <div
