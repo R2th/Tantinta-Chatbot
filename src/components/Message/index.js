@@ -4,7 +4,7 @@ import Emoji from "react-emoji-render";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-const useStyle = makeStyles(() => ({
+const useStyles = makeStyles(() => ({
   promptText: {
     padding: 10,
     backgroundColor: "#2d3552",
@@ -63,7 +63,7 @@ const useHover = () => {
 };
 
 const ResponseMessage = ({ content }) => {
-  const styles = useStyle();
+  const styles = useStyles();
   const { isHover, handleMouseLeave, handleMouseMove } = useHover();
   const [isReactionActive, setIsReactionActive] = useState(false);
 
@@ -97,20 +97,25 @@ const ResponseMessage = ({ content }) => {
   );
 };
 
-const PromptMessage = ({ content }) => {
-  const styles = useStyle();
+const PromptMessage = ({ content, isSeen }) => {
+  const styles = useStyles();
   const { isHover, handleMouseLeave, handleMouseMove } = useHover();
   const [isReactionActive, setIsReactionActive] = useState(false);
 
   useEffect(() => {
-    let interval = setInterval(() => {
-      setIsReactionActive(true);
-    }, 1500);
+    if (isSeen) {
+      if (!isReactionActive) {
+        let interval = setInterval(() => {
+          setIsReactionActive(true);
+        }, 500);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+        return () => {
+          clearInterval(interval);
+        };
+      }
+    }
+    //eslint-disable-next-line
+  }, [isSeen]);
 
   return (
     <div
@@ -143,10 +148,10 @@ const PromptMessage = ({ content }) => {
   );
 };
 
-const Message = ({ role, content }) => {
+const Message = ({ role, content, isSeen = false }) => {
   return (
     <>
-      {role === "human" && <PromptMessage content={content} />}
+      {role === "human" && <PromptMessage content={content} isSeen={isSeen} />}
       {role === "prev-chat" && <ResponseMessage content={content} />}
     </>
   );

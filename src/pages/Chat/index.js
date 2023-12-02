@@ -69,9 +69,10 @@ const ChatBox = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [conversation, setConversation] = useState([]); // Array of conversation with
-  // role 'prev-chat' as response from chatbox, 'human', and hidden role 'tantinta' (original response content from server)
+  // role 'prev-chat' as response from chat-box, 'human', and hidden role 'tantinta' (original response content from server)
   const [prevChat, setPrevChat] = useState([]); // Using prevChat as stack and push to Chat with speed calculation by CPM
   const [prompt, setPrompt] = useState("");
+  const [isSeen, setIsSeen] = useState(false);
 
   const scrollRef = useRef(null);
 
@@ -79,11 +80,10 @@ const ChatBox = ({ children }) => {
     e.preventDefault();
 
     if (prompt !== "") {
-      setIsLoading(true);
-
+      setIsSeen(false);
       const newConversation = [
         ...conversation,
-        { role: "human", content: prompt, metadata: {} },
+        { role: "human", content: prompt, metadata: { isSeen: false } },
       ];
 
       setPrompt("");
@@ -100,24 +100,41 @@ const ChatBox = ({ children }) => {
         }
       );
 
-      setIsLoading(false);
-
+      setIsSeen(true);
       if (data.content) {
         const lastMessage = data.content.slice(-1)[0];
 
         if (lastMessage.role === "tatinta") {
-          setPrevChat(
-            lastMessage.metadata.sent.map((msg) => ({
-              role: "prev-chat",
-              content: msg,
-            }))
-          );
+          let interval = setInterval(() => {
+            setPrevChat(
+              lastMessage.metadata.sent.map((msg) => ({
+                role: "prev-chat",
+                content: msg,
+              }))
+            );
+          }, 1000);
 
           setConversation((prev) => [...prev, ...data.content.slice(-1)]);
+
+          return () => {
+            clearInterval(interval);
+          };
         }
       }
     }
   };
+
+  useEffect(() => {
+    if (isSeen) {
+      setConversation((prev) =>
+        prev.map((msg) => {
+          if (msg.role === "human") {
+            return { ...msg, metadata: { isSeen: true } };
+          } else return { ...msg };
+        })
+      );
+    }
+  }, [isSeen]);
 
   // Auto scroll to bottom of conversation
   useEffect(() => {
@@ -151,7 +168,7 @@ const ChatBox = ({ children }) => {
   }, [prevChat]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.chat}>
       {children}
       <div className={styles.box}>
         <div
@@ -164,7 +181,12 @@ const ChatBox = ({ children }) => {
           }}
         >
           {conversation.map((msg, idx) => (
-            <Message role={msg.role} content={msg.content} key={idx} />
+            <Message
+              role={msg.role}
+              content={msg.content}
+              key={idx}
+              isSeen={msg.metadata?.isSeen}
+            />
           ))}
           {isLoading && (
             <div
